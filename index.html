@@ -8,12 +8,13 @@
     <!-- Tailwind CSS 引入 -->
     <script src="https://cdn.tailwindcss.com"></script>
     
+    <!-- 使用更稳定的 cdnjs 链接替代 unpkg，避免最新版 bug -->
     <!-- React 和 ReactDOM 引入 -->
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
     
-    <!-- Babel 引入 (用于在浏览器中编译 JSX) -->
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Babel 引入 (固定版本为 7.23.5，修复最新的 import 报错) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
 
     <style>
         .perspective-1000 { perspective: 1000px; }
@@ -25,7 +26,8 @@
 <body class="min-h-screen bg-slate-50 font-sans">
     <div id="root"></div>
 
-    <script type="text/babel">
+    <!-- 添加 data-type="module" 和 data-presets="react" 保证编译稳定性 -->
+    <script type="text/babel" data-type="module" data-presets="react">
         const { useState } = React;
 
         // --- 数据定义 (DATA DEFINITIONS) ---
@@ -171,13 +173,13 @@
 
         const playAudio = (text) => {
           if ('speechSynthesis' in window) {
-            // Cancel any ongoing speech
+            // 取消当前正在播放的语音
             window.speechSynthesis.cancel();
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.lang = 'zh-CN';
             window.speechSynthesis.speak(utterance);
           } else {
-             console.warn("Speech Synthesis is not supported in this browser.");
+             console.warn("您的浏览器不支持语音合成功能。");
           }
         };
 
